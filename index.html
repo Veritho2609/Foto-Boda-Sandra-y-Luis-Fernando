@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Boda de Sandra y Luis Fernando</title>
+  <meta name="description" content="Galería oficial de la boda de Sandra y Luis Fernando - sube tus fotos"> 
+  <link rel="icon" href="data:,">
+  <style>
+  :root{
+    --emerald: #046a4f;
+    --accent: #0d8f6b;
+    --bg: #ffffff;
+    --muted: #6b7280;
+    --radius: 14px;
+    --max-width: 1100px;
+  }
+  *{box-sizing:border-box}
+  body{font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; margin:0; background:var(--bg); color:#0b0b0b}
+  .wrap{max-width:var(--max-width); margin:36px auto; padding:28px;}
+
+  /* HERO */
+  .hero{position:relative; width:100%; height:60vh; display:flex; align-items:center; justify-content:center; background:#f5f5f5; border-radius:var(--radius); overflow:hidden; margin-bottom:36px;}
+  .hero img{position:absolute; width:100%; height:100%; object-fit:cover; top:0; left:0;}
+  .hero-text{position:relative; color:white; text-align:center; z-index:2;}
+  .hero-text h1{font-size:48px; font-family:'Great Vibes', cursive; margin:0; text-shadow:0 2px 8px rgba(0,0,0,0.5);}
+  .hero-text p{font-size:22px; margin:8px 0 0; text-shadow:0 1px 4px rgba(0,0,0,0.5);}
+
+  /* Upload card */
+  .card{background:white;border-radius:var(--radius);padding:18px;box-shadow:0 8px 30px rgba(7,10,12,0.06);margin-top:20px}
+  .grid{display:grid;grid-template-columns:1fr 320px;gap:20px}
+  @media(max-width:880px){.grid{grid-template-columns:1fr} .side{order:-1}}
+  .uploader{display:flex;flex-direction:column;gap:12px}
+  label.file{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;border:1px dashed #e6e6e6;cursor:pointer}
+  input[type=file]{display:none}
+  .btn{background:var(--emerald);color:white;padding:10px 14px;border-radius:10px;border:0;cursor:pointer}
+  .btn.ghost{background:transparent;border:1px solid rgba(4,106,79,0.12);color:var(--emerald)}
+  .small{font-size:13px;color:var(--muted)}
+  .progress{height:8px;background:#f1f1f1;border-radius:8px;overflow:hidden}
+  .bar{height:100%;width:0;background:linear-gradient(90deg,var(--emerald),var(--accent));transition:width .25s}
+
+  /* Gallery */
+  .gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-top:18px}
+  .photo{position:relative;border-radius:12px;overflow:hidden;background:#f5f5f5;min-height:140px;cursor:pointer}
+  .photo img{width:100%;height:100%;object-fit:cover;display:block}
+  .meta{position:absolute;left:8px;bottom:8px;background:rgba(0,0,0,0.45);color:white;padding:6px 8px;border-radius:999px;font-size:12px}
+
+  footer{margin-top:28px;color:var(--muted);font-size:13px}
+
+  /* Lightbox */
+  .lightbox{position:fixed;inset:0;background:rgba(4,6,7,0.75);display:none;align-items:center;justify-content:center;padding:20px}
+  .lightbox.open{display:flex}
+  .lightbox img{max-width:96vw;max-height:86vh;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,0.6)}
+  .controls{display:flex;gap:8px;margin-top:10px}
+
+  /* QR & side */
+  .side{display:flex;flex-direction:column;gap:12px}
+  .qrbox{text-align:center;padding:12px;border-radius:10px;border:1px solid #f0f0f0}
+  .linkbox{word-break:break-word;font-size:13px;color:var(--muted)}
+  .admin{display:flex;flex-direction:column;gap:8px}
+  .hint{font-size:13px;color:var(--muted)}
+
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="wrap">
+    <!-- HERO -->
+    <section class="hero">
+      <img src="https://via.placeholder.com/1200x600.png?text=Novios" alt="Sandra y Luis Fernando">
+      <div class="hero-text">
+        <p>Nuestra Boda</p>
+        <h1>Sandra & Luis Fernando</h1>
+      </div>
+    </section>
+
+    <div class="grid card">
+      <div>
+        <div class="uploader">
+          <div style="display:flex;gap:12px;align-items:center;justify-content:space-between">
+            <strong>Sube tus fotos</strong>
+            <span class="small">Todos pueden subir • Formato JPG/PNG • Máx 10 MB</span>
+          </div>
+          <label class="file">
+            <input id="fileInput" type="file" accept="image/*" multiple>
+            <span>Seleccionar fotos</span>
+          </label>
+          <div style="display:flex;gap:10px">
+            <button id="uploadBtn" class="btn">Subir al álbum</button>
+            <button id="previewBtn" class="btn ghost">Vista previa</button>
+          </div>
+          <div id="progressWrap" style="display:none">
+            <div class="small">Subiendo... <span id="progressText">0%</span></div>
+            <div class="progress" style="margin-top:8px"><div class="bar" id="bar"></div></div>
+          </div>
+          <div id="localPreview" class="gallery" style="margin-top:10px"></div>
+          <div class="hint">Escanea el QR al lado para abrir la página en el celular y subir fotos directamente.</div>
+        </div>
+        <div id="gallery" class="gallery" aria-live="polite" style="margin-top:18px"></div>
+      </div>
+
+      <aside class="side">
+        <div class="card qrbox" style="text-align:center">
+          <div id="qrcode"></div>
+          <div style="margin-top:8px;font-weight:600">Acceso rápido</div>
+          <div class="linkbox" id="pageUrl">Cargando enlace...</div>
+          <button id="downloadQR" class="btn ghost" style="margin-top:10px">Descargar QR</button>
+        </div>
+
+        <div class="card admin">
+          <div><strong>Área de administrador</strong></div>
+          <input id="adminPass" type="password" placeholder="Contraseña admin" style="padding:8px;border-radius:8px;border:1px solid #eee">
+          <div style="display:flex;gap:8px">
+            <button id="refreshBtn" class="btn ghost">Refrescar galería</button>
+            <button id="deleteSelected" class="btn" style="background:#b91c1c">Eliminar seleccionadas</button>
+          </div>
+          <div class="small">Selecciona fotos (clic) en la galería para marcarlas. La eliminación necesita la contraseña admin.</div>
+        </div>
+
+        <div class="card" style="text-align:center">
+          <div class="small">Modo prueba (sin Firebase): las fotos se guardan en tu navegador.</div>
+        </div>
+      </aside>
+    </div>
+
+    <footer>
+      Página creada para la boda • Diseñada minimalista • Tipografía elegante y verde esmeralda.
+    </footer>
+  </div>
+
+  <!-- Lightbox -->
+  <div id="lightbox" class="lightbox" role="dialog" aria-hidden="true">
+    <div>
+      <img id="lightImg" src="#" alt="">
+      <div class="controls" style="justify-content:center">
+        <button id="closeLB" class="btn ghost">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- QR y lógica subida de fotos igual que antes -->
+  <script type="module">
+  // Aquí va el mismo código JS que tenía antes para Firebase/localStorage, galería, QR, lightbox y administración.
+  // Solo necesitas copiar la parte del script de mi código anterior en este archivo, debajo del cierre del hero.
+  </script>
+</body>
+</html>
