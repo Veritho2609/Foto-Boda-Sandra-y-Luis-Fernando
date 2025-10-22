@@ -69,13 +69,14 @@ body{font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial; mar
   });
 
   // Cargar fotos automáticamente desde tu Web App
-  fetch('https://script.google.com/macros/s/AKfycbyhdJNa2uwKJf7C1LtmCEbPRWwnY1AchlarKPKm40lwJBmwOVR47OSgflrIl1xRNzfsxA/exec')
+  fetch('https://script.google.com/macros/s/AKfycbz6-NVNauY5XhTSSkbUqSiGgRmxZ1JSYT360fT1KPLvQId1ikUep3xA_zPAGD8Rb6Z5sg/exec')
     .then(response => response.json())
     .then(fotos => {
       const gallery = document.getElementById('gallery');
       fotos.forEach(url => {
         const img = document.createElement('img');
         img.src = url;
+        img.alt = "Foto de la boda";
         gallery.appendChild(img);
       });
     })
@@ -83,3 +84,4 @@ body{font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial; mar
 </script>
 </body>
 </html>
+
